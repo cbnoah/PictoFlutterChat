@@ -9,6 +9,23 @@ Gradient buildMenuButtonAndTextFieldsGradient() {
   );
 }
 
+Gradient buildMenuAppBarAndBottomNavBarGradient(bool inverted) {
+  if (inverted) {
+    return const LinearGradient(
+      colors: [Color(0xFF507e94), Color(0xFF94abb7), Color(0xFFd9d9d9)],
+      stops: [0.0, 0.27, 0.76],
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+    );
+  }
+  return const LinearGradient(
+    colors: [Color(0xFFd9d9d9), Color(0xFF94abb7), Color(0xFF507e94)],
+    stops: [0.0, 0.27, 0.76],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+}
+
 BoxShadow menuButtonAndTextFieldBoxShadow() {
   return BoxShadow(
     color: Colors.black.withValues(alpha: 0.8),
