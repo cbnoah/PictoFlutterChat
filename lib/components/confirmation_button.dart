@@ -9,15 +9,16 @@ class ConfirmationButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.zero,
       decoration: BoxDecoration(
         gradient: buildMenuButtonAndTextFieldsGradient(),
         border: Border.all(color: Color(0xFFA4A4A4), width: 2),
         boxShadow: [menuButtonAndTextFieldBoxShadow()],
       ),
-      child: FilledButton(
+      child: TextButton(
         onPressed: () {},
-        style: FilledButton.styleFrom(
-          minimumSize: const Size.fromHeight(30),
+        style: TextButton.styleFrom(
+          minimumSize: const Size.fromHeight(0),
           backgroundColor: Colors.transparent,
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
           textStyle: const TextStyle(
