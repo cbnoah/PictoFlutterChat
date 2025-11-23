@@ -5,6 +5,7 @@ ThemeData lightTheme = ThemeData(
   colorScheme: ColorScheme.light(
     primary: Color(0xFF507e94),
     secondary: Color(0xFF94abb7),
-    surface: Color(0xFFAEB0AD)
+    surface: Color(0xFFAEB0AD),
+    onSurface: Color(0xFF515151)
   ),
 );
