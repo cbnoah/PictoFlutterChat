@@ -4,9 +4,15 @@ import 'color_builders.dart';
 
 class AccountTextBar extends StatelessWidget {
   final String labelText;
+  final bool obscureText;
+  final TextEditingController controller;
 
-
-  const AccountTextBar({super.key, required this.labelText});
+  const AccountTextBar({
+    super.key,
+    required this.labelText,
+    required this.obscureText,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +21,9 @@ class AccountTextBar extends StatelessWidget {
         gradient: buildMenuButtonAndTextFieldsGradient(),
         boxShadow: [menuButtonAndTextFieldBoxShadow()],
       ),
-      child: TextField(
+      child: TextFormField(
+        obscureText: obscureText,
+        controller: controller,
         style: TextStyle(
           fontFamily: "Pixelify",
           fontWeight: FontWeight.w400,
