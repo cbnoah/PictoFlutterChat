@@ -4,14 +4,22 @@ import 'color_builders.dart';
 
 class BottomNavBarButton extends StatelessWidget {
   final String buttonText;
+  final Widget redirectPage;
 
-  const BottomNavBarButton({super.key, required this.buttonText});
+  const BottomNavBarButton({
+    super.key,
+    required this.buttonText,
+    required this.redirectPage,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Define the action to be performed on tap
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => redirectPage),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
