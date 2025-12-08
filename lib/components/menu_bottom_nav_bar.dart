@@ -17,7 +17,12 @@ class MenuBottomNavBar extends StatelessWidget {
         border: Border(top: BorderSide(color: Colors.black, width: 4)),
       ),
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: SafeArea(child: BottomNavBarButton(buttonText: buttonText)),
+      child: SafeArea(
+        child: BottomNavBarButton(
+          buttonText: buttonText,
+          redirectPage: Placeholder(),
+        ),
+      ),
     );
   }
 }
