@@ -16,10 +16,25 @@ class BottomNavBarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => redirectPage),
+          PageRouteBuilder(
+            transitionDuration: Duration(milliseconds: 500),
+            pageBuilder: (context, animation, secondaryAnimation) => redirectPage,
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+                ),
+                child: Container(
+                  color: Colors.white,
+                  child: child,
+                ),
+              );
+            },
+          ),
         );
+
       },
       child: Container(
         decoration: BoxDecoration(
