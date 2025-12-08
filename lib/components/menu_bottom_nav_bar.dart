@@ -5,8 +5,13 @@ import 'color_builders.dart';
 
 class MenuBottomNavBar extends StatelessWidget {
   final String buttonText;
+  final Widget redirectPage;
 
-  const MenuBottomNavBar({super.key, required this.buttonText});
+  const MenuBottomNavBar({
+    super.key,
+    required this.buttonText,
+    required this.redirectPage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +25,7 @@ class MenuBottomNavBar extends StatelessWidget {
       child: SafeArea(
         child: BottomNavBarButton(
           buttonText: buttonText,
-          redirectPage: Placeholder(),
+          redirectPage: redirectPage,
         ),
       ),
     );
