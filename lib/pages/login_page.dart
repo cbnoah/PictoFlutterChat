@@ -4,6 +4,7 @@ import 'package:picto_flutter_chat/components/confirmation_button.dart';
 import 'package:picto_flutter_chat/components/login_with_buttons.dart';
 import 'package:picto_flutter_chat/components/menu_app_bar.dart';
 import 'package:picto_flutter_chat/components/menu_bottom_nav_bar.dart';
+import 'package:picto_flutter_chat/pages/signup_page.dart';
 import '../components/account_text_bar.dart';
 import '../components/horizontal_lines_background_painter.dart';
 
@@ -40,7 +41,9 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Padding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom == 0 ? 80.0 : 0,
+                bottom: MediaQuery.of(context).viewInsets.bottom == 0
+                    ? 80.0
+                    : 0,
               ),
               child: Center(
                 child: SingleChildScrollView(
@@ -118,7 +121,10 @@ class _LoginPageState extends State<LoginPage> {
           if (MediaQuery.of(context).viewInsets.bottom == 0)
             Align(
               alignment: Alignment.bottomCenter,
-              child: MenuBottomNavBar(buttonText: "Sign Up"),
+              child: MenuBottomNavBar(
+                buttonText: "Sign Up",
+                redirectPage: SignupPage(),
+              ),
             ),
         ],
       ),
