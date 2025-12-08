@@ -25,6 +25,7 @@ class MenuAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Text(
             title,
             style: TextStyle(fontFamily: "Nintendo_DS_Bios", fontSize: 35, color: Colors.black),
+            textAlign: TextAlign.center,
           ),
         ),
       ),
