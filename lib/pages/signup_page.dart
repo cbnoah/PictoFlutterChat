@@ -10,6 +10,7 @@ import 'login_page.dart';
 class SignupPage extends StatefulWidget {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   SignupPage({super.key});
 
@@ -70,16 +71,19 @@ class _SignupPageState extends State<SignupPage> {
                             labelText: "Username",
                             obscureText: false,
                             controller: widget._usernameController,
+                            isPasswordField: false,
                           ),
                           AccountTextBar(
                             labelText: "Email",
                             obscureText: false,
-                            controller: widget._usernameController,
+                            controller: widget._emailController,
+                            isPasswordField: false,
                           ),
                           AccountTextBar(
                             labelText: "Password",
                             obscureText: true,
                             controller: widget._passwordController,
+                            isPasswordField: true,
                           ),
                           ConfirmationButton(buttonText: "Sign in"),
                         ],
