@@ -19,7 +19,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _loginFormKey = GlobalKey<FormState>();
+  //final _loginFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +71,13 @@ class _LoginPageState extends State<LoginPage> {
                             labelText: "Username or Email",
                             obscureText: false,
                             controller: widget._usernameController,
+                            isPasswordField: false,
                           ),
                           AccountTextBar(
                             labelText: "Password",
                             obscureText: true,
                             controller: widget._passwordController,
+                            isPasswordField: true,
                           ),
                           ConfirmationButton(buttonText: "Log in"),
                         ],
