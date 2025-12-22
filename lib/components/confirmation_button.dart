@@ -3,8 +3,9 @@ import 'package:picto_flutter_chat/components/color_builders.dart';
 
 class ConfirmationButton extends StatelessWidget {
   final String buttonText;
+  final VoidCallback action;
 
-  const ConfirmationButton({super.key, required this.buttonText});
+  const ConfirmationButton({super.key, required this.buttonText, required this.action});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class ConfirmationButton extends StatelessWidget {
         boxShadow: [menuButtonAndTextFieldBoxShadow()],
       ),
       child: TextButton(
-        onPressed: () {},
+        onPressed: action,
         style: TextButton.styleFrom(
           minimumSize: const Size.fromHeight(0),
           backgroundColor: Colors.transparent,
