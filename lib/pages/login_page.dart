@@ -5,9 +5,12 @@ import 'package:picto_flutter_chat/components/confirmation_button.dart';
 import 'package:picto_flutter_chat/components/login_with_buttons.dart';
 import 'package:picto_flutter_chat/components/menu_app_bar.dart';
 import 'package:picto_flutter_chat/components/menu_bottom_nav_bar.dart';
+import 'package:picto_flutter_chat/pages/reset_password.dart';
 import 'package:picto_flutter_chat/pages/signup_page.dart';
 import 'package:picto_flutter_chat/utils/auth.dart';
+import 'package:picto_flutter_chat/utils/auth_layout.dart';
 import '../components/account_text_bar.dart';
+import '../components/color_builders.dart';
 import '../components/horizontal_lines_background_painter.dart';
 
 class LoginPage extends StatefulWidget {
@@ -25,10 +28,17 @@ class _LoginPageState extends State<LoginPage> {
   String errorMessage = '';
 
   void signIn() async {
+    if (widget._emailController.text == "" ||
+        widget._passwordController.text == "") {
+      setState(() {
+        errorMessage = "Please fill all fields";
+      });
+      return;
+    }
     try {
       await authService.value.signInWithEmailAndPassword(
-        widget._emailController.text,
-        widget._passwordController.text,
+        email: widget._emailController.text,
+        password: widget._passwordController.text,
       );
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -42,7 +52,10 @@ class _LoginPageState extends State<LoginPage> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return Scaffold(
       appBar: const MenuAppBar(title: 'Welcome back'),
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme
+          .of(context)
+          .colorScheme
+          .surface,
       body: Stack(
         children: [
           CustomPaint(
@@ -57,7 +70,10 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Padding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom == 0
+                bottom: MediaQuery
+                    .of(context)
+                    .viewInsets
+                    .bottom == 0
                     ? 80.0
                     : 0,
               ),
@@ -65,8 +81,8 @@ class _LoginPageState extends State<LoginPage> {
                 child: SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 50.0,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    spacing: 20.0,
                     children: [
                       Text(
                         'Login to your account',
@@ -95,15 +111,43 @@ class _LoginPageState extends State<LoginPage> {
                             controller: widget._passwordController,
                             isPasswordField: true,
                           ),
-                          Text(
-                            errorMessage,
-                            style: TextStyle(color: Colors.red),
-                          ),
                           ConfirmationButton(
                             buttonText: "Log in",
                             action: () => signIn(),
                           ),
                         ],
+                      ),
+                      Text(
+                        errorMessage,
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontFamily: "Pixelify",
+                            shadows: [BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.8),
+                              spreadRadius: 1,
+                              blurRadius: 4,
+                              offset: const Offset(
+                                  0, 2), // changes position of shadow
+                            )
+                            ]
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ResetPassword()),
+                          );
+                        },
+                        child: Text(
+                          "Forgot your password ?",
+                          style: TextStyle(
+                            fontFamily: "Pixelify",
+                            fontSize: 20,
+                            color: Colors.black
+                          ),
+                        ),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -143,7 +187,10 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          if (MediaQuery.of(context).viewInsets.bottom == 0)
+          if (MediaQuery
+              .of(context)
+              .viewInsets
+              .bottom == 0)
             Align(
               alignment: Alignment.bottomCenter,
               child: MenuBottomNavBar(
