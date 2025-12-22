@@ -8,50 +8,34 @@ class Auth {
 
   User? get currentUser => _firebaseAuth.currentUser;
 
-  Future<User?> signInWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
-    try {
-      UserCredential userCredential = await _firebaseAuth
-          .signInWithEmailAndPassword(email: email, password: password);
-      return userCredential.user;
-    } catch (e) {
-      print('Error signing in: $e');
-      return null;
-    }
+  Future<UserCredential> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    return await _firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
   }
 
-  Future<User?> registerWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
-    try {
-      UserCredential userCredential = await _firebaseAuth
-          .createUserWithEmailAndPassword(email: email, password: password);
-      return userCredential.user;
-    } catch (e) {
-      print('Error registering: $e');
-      return null;
-    }
+  Future<UserCredential> registerWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    return await _firebaseAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
   }
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
   Future<void> resetPassword({required String email}) async {
-    try {
-      await _firebaseAuth.sendPasswordResetEmail(email: email);
-    } catch (e) {
-      print('Error sending password reset email: $e');
-    }
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
   Future<void> updateUsername({required String username}) async {
-    try {
-      await currentUser!.updateDisplayName(username);
-    } catch (e) {
-      print('Error updating password: $e');
-    }
+    await currentUser!.updateDisplayName(username);
   }
 
   Future<void> deleteAccount({
