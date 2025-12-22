@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:picto_flutter_chat/components/confirmation_button.dart';
@@ -5,11 +6,12 @@ import 'package:picto_flutter_chat/components/login_with_buttons.dart';
 import 'package:picto_flutter_chat/components/menu_app_bar.dart';
 import 'package:picto_flutter_chat/components/menu_bottom_nav_bar.dart';
 import 'package:picto_flutter_chat/pages/signup_page.dart';
+import 'package:picto_flutter_chat/utils/auth.dart';
 import '../components/account_text_bar.dart';
 import '../components/horizontal_lines_background_painter.dart';
 
 class LoginPage extends StatefulWidget {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   LoginPage({super.key});
@@ -20,6 +22,20 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   //final _loginFormKey = GlobalKey<FormState>();
+  String errorMessage = '';
+
+  void signIn() async {
+    try {
+      await authService.value.signInWithEmailAndPassword(
+        widget._emailController.text,
+        widget._passwordController.text,
+      );
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message ?? 'There\'s an error while signing in';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +84,9 @@ class _LoginPageState extends State<LoginPage> {
                         spacing: 20.0,
                         children: [
                           AccountTextBar(
-                            labelText: "Username or Email",
+                            labelText: "Email",
                             obscureText: false,
-                            controller: widget._usernameController,
+                            controller: widget._emailController,
                             isPasswordField: false,
                           ),
                           AccountTextBar(
@@ -79,7 +95,14 @@ class _LoginPageState extends State<LoginPage> {
                             controller: widget._passwordController,
                             isPasswordField: true,
                           ),
-                          ConfirmationButton(buttonText: "Log in"),
+                          Text(
+                            errorMessage,
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          ConfirmationButton(
+                            buttonText: "Log in",
+                            action: () => signIn(),
+                          ),
                         ],
                       ),
                       Column(
