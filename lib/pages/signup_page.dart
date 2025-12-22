@@ -25,12 +25,19 @@ class _SignupPageState extends State<SignupPage> {
   String errorMessage = '';
 
   void register() async {
+    if (widget._emailController.text == "" ||
+        widget._passwordController.text == "") {
+      setState(() {
+        errorMessage = "Please fill all fields";
+      });
+      return;
+    }
     try {
-      print(widget._emailController.text);
-      print(widget._passwordController.text);
       await authService.value.registerWithEmailAndPassword(
-          widget._emailController.text, widget._passwordController.text);
-    } on FirebaseAuthException catch (e) {
+        email: widget._emailController.text,
+        password: widget._passwordController.text,
+      );
+    } on FirebaseException catch (e) {
       setState(() {
         errorMessage = e.message ?? 'There\'s an error while registering';
       });
@@ -42,10 +49,7 @@ class _SignupPageState extends State<SignupPage> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return Scaffold(
       appBar: const MenuAppBar(title: 'Welcome to PictoFlutterChat'),
-      backgroundColor: Theme
-          .of(context)
-          .colorScheme
-          .surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Stack(
         children: [
           CustomPaint(
@@ -60,10 +64,7 @@ class _SignupPageState extends State<SignupPage> {
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Padding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery
-                    .of(context)
-                    .viewInsets
-                    .bottom == 0
+                bottom: MediaQuery.of(context).viewInsets.bottom == 0
                     ? 80.0
                     : 0,
               ),
@@ -107,10 +108,28 @@ class _SignupPageState extends State<SignupPage> {
                             controller: widget._passwordController,
                             isPasswordField: true,
                           ),
-                          Text(errorMessage, style: TextStyle(
-                              color: Colors.red),),
                           ConfirmationButton(
-                            buttonText: "Sign in", action: () => register(),),
+                            buttonText: "Sign in",
+                            action: () => register(),
+                          ),
+                          Text(
+                            errorMessage,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontFamily: "Pixelify",
+                              shadows: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.8),
+                                  spreadRadius: 1,
+                                  blurRadius: 4,
+                                  offset: const Offset(
+                                    0,
+                                    2,
+                                  ), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -119,10 +138,7 @@ class _SignupPageState extends State<SignupPage> {
               ),
             ),
           ),
-          if (MediaQuery
-              .of(context)
-              .viewInsets
-              .bottom == 0)
+          if (MediaQuery.of(context).viewInsets.bottom == 0)
             Align(
               alignment: Alignment.bottomCenter,
               child: MenuBottomNavBar(
