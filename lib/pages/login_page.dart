@@ -8,9 +8,7 @@ import 'package:picto_flutter_chat/components/menu_bottom_nav_bar.dart';
 import 'package:picto_flutter_chat/pages/reset_password.dart';
 import 'package:picto_flutter_chat/pages/signup_page.dart';
 import 'package:picto_flutter_chat/utils/auth.dart';
-import 'package:picto_flutter_chat/utils/auth_layout.dart';
 import '../components/account_text_bar.dart';
-import '../components/color_builders.dart';
 import '../components/horizontal_lines_background_painter.dart';
 
 class LoginPage extends StatefulWidget {
@@ -196,6 +194,7 @@ class _LoginPageState extends State<LoginPage> {
               child: MenuBottomNavBar(
                 buttonText: "Sign Up",
                 redirectPage: SignupPage(),
+                icon: Icon(Icons.add_circle_outline),
               ),
             ),
         ],
