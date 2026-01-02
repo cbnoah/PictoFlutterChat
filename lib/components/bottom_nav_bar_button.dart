@@ -5,11 +5,12 @@ import 'color_builders.dart';
 class BottomNavBarButton extends StatelessWidget {
   final String buttonText;
   final Widget redirectPage;
+  final Icon? icon;
 
   const BottomNavBarButton({
     super.key,
     required this.buttonText,
-    required this.redirectPage,
+    required this.redirectPage, required this.icon,
   });
 
   @override
@@ -41,13 +42,13 @@ class BottomNavBarButton extends StatelessWidget {
           gradient: buildMenuButtonAndTextFieldsGradient(),
           border: Border.all(color: Color(0xFFA4A4A4), width: 2),
         ),
-        margin: EdgeInsets.symmetric(horizontal: 120),
+        margin: EdgeInsets.symmetric(horizontal: 100),
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 10,
             children: [
-              Icon(Icons.add_circle_outline),
+              ?icon,
               Text(
                 buttonText,
                 style: TextStyle(
