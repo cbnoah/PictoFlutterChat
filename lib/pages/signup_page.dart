@@ -144,6 +144,7 @@ class _SignupPageState extends State<SignupPage> {
               child: MenuBottomNavBar(
                 buttonText: "Sign Up",
                 redirectPage: LoginPage(),
+                icon: Icon(Icons.account_circle_outlined)
               ),
             ),
         ],
