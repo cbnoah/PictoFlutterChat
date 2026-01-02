@@ -168,13 +168,13 @@ class _LoginPageState extends State<LoginPage> {
                               LoginWithButtons(
                                 buttonText: "Google",
                                 redirectPage: Placeholder(),
-                                imagePath: "assets/logo/google_pixel_logo.png",
+                                imagePath: "assets/logos/google_pixel_logo.png",
                                 backgroundColor: Color(0xFFd9d9d9),
                               ),
                               LoginWithButtons(
                                 buttonText: "Discord",
                                 redirectPage: Placeholder(),
-                                imagePath: "assets/logo/discord_pixel_logo.png",
+                                imagePath: "assets/logos/discord_pixel_logo.png",
                                 backgroundColor: Color(0xFF5662F6),
                               ),
                             ],
