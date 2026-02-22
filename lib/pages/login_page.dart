@@ -1,5 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:picto_flutter_chat/utils/auth_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:picto_flutter_chat/components/confirmation_button.dart';
 import 'package:picto_flutter_chat/components/login_with_buttons.dart';
@@ -7,14 +9,10 @@ import 'package:picto_flutter_chat/components/menu_app_bar.dart';
 import 'package:picto_flutter_chat/components/menu_bottom_nav_bar.dart';
 import 'package:picto_flutter_chat/pages/reset_password.dart';
 import 'package:picto_flutter_chat/pages/signup_page.dart';
-import 'package:picto_flutter_chat/utils/auth.dart';
 import '../components/account_text_bar.dart';
 import '../components/horizontal_lines_background_painter.dart';
 
 class LoginPage extends StatefulWidget {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
   LoginPage({super.key});
 
   @override
@@ -22,27 +20,34 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  //final _loginFormKey = GlobalKey<FormState>();
-  String errorMessage = '';
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  late final StreamSubscription<AuthState> _authStateSubscription;
+  final authService = AuthService();
+  String _errorMessage = '';
 
   void signIn() async {
-    if (widget._emailController.text == "" ||
-        widget._passwordController.text == "") {
+    if (_emailController.text == "" || _passwordController.text == "") {
       setState(() {
-        errorMessage = "Please fill all fields";
+        _errorMessage = "Please fill all fields";
       });
       return;
     }
     try {
-      await authService.value.signInWithEmailAndPassword(
-        email: widget._emailController.text,
-        password: widget._passwordController.text,
-      );
-    } on FirebaseAuthException catch (e) {
+      await authService.signInWithEmailAndPassword(_emailController.text, _passwordController.text);
+    } on AuthApiException catch (e) {
       setState(() {
-        errorMessage = e.message ?? 'There\'s an error while signing in';
+        _errorMessage = e.message;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _authStateSubscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -50,10 +55,7 @@ class _LoginPageState extends State<LoginPage> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return Scaffold(
       appBar: const MenuAppBar(title: 'Welcome back'),
-      backgroundColor: Theme
-          .of(context)
-          .colorScheme
-          .surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Stack(
         children: [
           CustomPaint(
@@ -68,10 +70,7 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Padding(
               padding: EdgeInsets.only(
-                bottom: MediaQuery
-                    .of(context)
-                    .viewInsets
-                    .bottom == 0
+                bottom: MediaQuery.of(context).viewInsets.bottom == 0
                     ? 80.0
                     : 0,
               ),
@@ -100,13 +99,13 @@ class _LoginPageState extends State<LoginPage> {
                           AccountTextBar(
                             labelText: "Email",
                             obscureText: false,
-                            controller: widget._emailController,
+                            controller: _emailController,
                             isPasswordField: false,
                           ),
                           AccountTextBar(
                             labelText: "Password",
                             obscureText: true,
-                            controller: widget._passwordController,
+                            controller: _passwordController,
                             isPasswordField: true,
                           ),
                           ConfirmationButton(
@@ -116,18 +115,21 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                       ),
                       Text(
-                        errorMessage,
+                        _errorMessage,
                         style: TextStyle(
-                            color: Colors.red,
-                            fontFamily: "Pixelify",
-                            shadows: [BoxShadow(
+                          color: Colors.red,
+                          fontFamily: "Pixelify",
+                          shadows: [
+                            BoxShadow(
                               color: Colors.black.withValues(alpha: 0.8),
                               spreadRadius: 1,
                               blurRadius: 4,
                               offset: const Offset(
-                                  0, 2), // changes position of shadow
-                            )
-                            ]
+                                0,
+                                2,
+                              ), // changes position of shadow
+                            ),
+                          ],
                         ),
                       ),
                       GestureDetector(
@@ -135,7 +137,8 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ResetPassword()),
+                              builder: (context) => ResetPassword(),
+                            ),
                           );
                         },
                         child: Text(
@@ -143,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(
                             fontFamily: "Pixelify",
                             fontSize: 20,
-                            color: Colors.black
+                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -172,7 +175,8 @@ class _LoginPageState extends State<LoginPage> {
                               LoginWithButtons(
                                 buttonText: "Discord",
                                 redirectPage: Placeholder(),
-                                imagePath: "assets/logos/discord_pixel_logo.png",
+                                imagePath:
+                                    "assets/logos/discord_pixel_logo.png",
                                 backgroundColor: Color(0xFF5662F6),
                               ),
                             ],
@@ -185,10 +189,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          if (MediaQuery
-              .of(context)
-              .viewInsets
-              .bottom == 0)
+          if (MediaQuery.of(context).viewInsets.bottom == 0)
             Align(
               alignment: Alignment.bottomCenter,
               child: MenuBottomNavBar(
