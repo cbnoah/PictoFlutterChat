@@ -1,45 +1,44 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:picto_flutter_chat/components/confirmation_button.dart';
 import 'package:picto_flutter_chat/components/menu_app_bar.dart';
 import 'package:picto_flutter_chat/components/menu_bottom_nav_bar.dart';
-import 'package:picto_flutter_chat/utils/auth.dart';
+import 'package:picto_flutter_chat/utils/auth_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../components/account_text_bar.dart';
 import '../components/horizontal_lines_background_painter.dart';
 import 'login_page.dart';
 
 class SignupPage extends StatefulWidget {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-
-  SignupPage({super.key});
+  const SignupPage({super.key});
 
   @override
   State<SignupPage> createState() => _SignupPageState();
 }
 
 class _SignupPageState extends State<SignupPage> {
-  // final _loginFormKey = GlobalKey<FormState>();
-  String errorMessage = '';
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final authService = AuthService();
+  String _errorMessage = '';
 
   void register() async {
-    if (widget._emailController.text == "" ||
-        widget._passwordController.text == "") {
+    if (_emailController.text == "" || _passwordController.text == "") {
       setState(() {
-        errorMessage = "Please fill all fields";
+        _errorMessage = "Please fill all fields";
       });
       return;
     }
     try {
-      await authService.value.registerWithEmailAndPassword(
-        email: widget._emailController.text,
-        password: widget._passwordController.text,
+      await authService.signUpWithEmailAndPassword(
+        _emailController.text,
+        _passwordController.text,
       );
-    } on FirebaseException catch (e) {
+      if (mounted) Navigator.pop(context);
+    } on AuthApiException catch (e) {
       setState(() {
-        errorMessage = e.message ?? 'There\'s an error while registering';
+        _errorMessage = e.message;
       });
     }
   }
@@ -93,19 +92,19 @@ class _SignupPageState extends State<SignupPage> {
                           AccountTextBar(
                             labelText: "Username",
                             obscureText: false,
-                            controller: widget._usernameController,
+                            controller: _usernameController,
                             isPasswordField: false,
                           ),
                           AccountTextBar(
                             labelText: "Email",
                             obscureText: false,
-                            controller: widget._emailController,
+                            controller: _emailController,
                             isPasswordField: false,
                           ),
                           AccountTextBar(
                             labelText: "Password",
                             obscureText: true,
-                            controller: widget._passwordController,
+                            controller: _passwordController,
                             isPasswordField: true,
                           ),
                           ConfirmationButton(
@@ -113,7 +112,7 @@ class _SignupPageState extends State<SignupPage> {
                             action: () => register(),
                           ),
                           Text(
-                            errorMessage,
+                            _errorMessage,
                             style: TextStyle(
                               color: Colors.red,
                               fontFamily: "Pixelify",
@@ -144,7 +143,7 @@ class _SignupPageState extends State<SignupPage> {
               child: MenuBottomNavBar(
                 buttonText: "Sign Up",
                 redirectPage: LoginPage(),
-                icon: Icon(Icons.account_circle_outlined)
+                icon: Icon(Icons.account_circle_outlined),
               ),
             ),
         ],
