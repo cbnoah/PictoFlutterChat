@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:picto_flutter_chat/pages/app_loading_page.dart';
 import 'package:picto_flutter_chat/pages/login_page.dart';
 import 'package:picto_flutter_chat/pages/server_choice_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'auth.dart';
 
 class AuthLayout extends StatelessWidget {
   final Widget? pageIfNotConnected;
@@ -12,21 +12,23 @@ class AuthLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: authService,
-      builder: (context, authService, child) {
-        return StreamBuilder(stream: authService.authStateChanges, builder: (context, snapshot) {
-          Widget widget;
+    return StreamBuilder(
+        stream: Supabase.instance.client.auth.onAuthStateChange,
+        builder: (context, snapshot) {
+
+          // loading response
           if (snapshot.connectionState == ConnectionState.waiting) {
-            widget = AppLoadingPage();
-          } else if (snapshot.hasData) {
-            widget = const ServerChoicePage();
-          } else {
-            widget = pageIfNotConnected ?? LoginPage();
+            return const AppLoadingPage();
           }
-          return widget;
-        });
-      },
+
+          final session = snapshot.hasData ? snapshot.data!.session : null;
+
+          if (session != null) {
+            return ServerChoicePage();
+          } else {
+            return LoginPage();
+          }
+        }
     );
   }
 }
