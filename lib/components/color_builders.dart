@@ -34,3 +34,12 @@ BoxShadow menuButtonAndTextFieldBoxShadow() {
     offset: const Offset(0, 4), // changes position of shadow
   );
 }
+
+Gradient chatPageSeparatorGradient() {
+  return const LinearGradient(
+    colors: [Color(0xFFAEAEAE), Color(0xFFD9D9D9), Color(0xFFAEAEAE)],
+    stops: [0.0, 0.5, 1],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter
+  );
+}
