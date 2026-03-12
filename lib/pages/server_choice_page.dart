@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:picto_flutter_chat/components/chat_room_button.dart';
 import 'package:picto_flutter_chat/components/menu_bottom_nav_bar.dart';
+import 'package:picto_flutter_chat/pages/chat_page.dart';
 import 'package:picto_flutter_chat/utils/auth_service.dart';
 
 import '../components/horizontal_lines_background_painter.dart';
@@ -45,6 +46,12 @@ class _ServerChoicePageState extends State<ServerChoicePage> {
                   ChatRoomButton(
                     chatRoomName: "A",
                     messageCount: refactorMessageCount(12),
+                    onTap: () => Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (BuildContext context) => const ChatPage(),
+                      ),
+                    ),
                   ),
                   ChatRoomButton(
                     chatRoomName: "B",
@@ -68,11 +75,16 @@ class _ServerChoicePageState extends State<ServerChoicePage> {
       bottomNavigationBar: MenuBottomNavBar(
         buttonText: "Settings",
         redirectPage: Scaffold(
-          appBar: AppBar(title: Text("Settings"),),
-          body: Center(child: FilledButton(onPressed: () {
-            logout();
-            Navigator.pop(context);
-          }, child: Text("Log out")),),
+          appBar: AppBar(title: Text("Settings")),
+          body: Center(
+            child: FilledButton(
+              onPressed: () {
+                logout();
+                Navigator.pop(context);
+              },
+              child: Text("Log out"),
+            ),
+          ),
         ),
         icon: Icon(Icons.settings),
       ),
