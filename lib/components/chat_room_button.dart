@@ -81,22 +81,28 @@ class ChatRoomButton extends StatelessWidget {
               "Chat Room $chatRoomName",
               style: TextStyle(fontFamily: "Nintendo_DS_Bios", fontSize: 35),
             ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Color(0xFF797979), width: 2),
-              ),
-              child: Row(
-                spacing: 4,
-                children: [
-                  Image.asset('assets/icons/message_icon.png'),
-                  Text(
-                    messageCount,
-                    style: TextStyle(
-                      fontFamily: "Nintendo_DS_Bios",
-                      fontSize: 35,
-                    ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Color(0xFF797979), width: 2),
                   ),
-                ],
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 4,
+                    children: [
+                      Image.asset('assets/icons/message_icon.png'),
+                      Text(
+                        messageCount,
+                        style: TextStyle(
+                          fontFamily: "Nintendo_DS_Bios",
+                          fontSize: 35,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ],
