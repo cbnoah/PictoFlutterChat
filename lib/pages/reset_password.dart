@@ -1,6 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:picto_flutter_chat/utils/auth.dart';
 
 import '../components/account_text_bar.dart';
 import '../components/color_builders.dart';
@@ -20,17 +18,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   String errorMessage = '';
 
   void resetPassword() async {
-    try {
-      await authService.value.resetPassword(email: _emailController.text);
-      setState(() {
-        errorMessage = '';
-      });
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        errorMessage =
-            e.message ?? 'An error occurred while resetting password';
-      });
-    }
+    return;
   }
 
   @override
