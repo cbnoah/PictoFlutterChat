@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:picto_flutter_chat/components/drawing_message.dart';
+import 'package:picto_flutter_chat/components/message_page_app_bar.dart';
 import 'package:picto_flutter_chat/components/text_message.dart';
 
 import '../components/color_builders.dart';
@@ -14,7 +16,9 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
     return Scaffold(
+      appBar: MessagePageAppBar(),
       backgroundColor: const Color(0xFFC0B9B7),
       body: SafeArea(
         child: Center(
