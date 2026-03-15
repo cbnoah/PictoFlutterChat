@@ -128,7 +128,11 @@ class MessagePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         for (int i = 0; i < internetConnection; i++)
-                          Container(width: 4, height: i*5, color: Colors.white),
+                          Container(
+                            width: 4,
+                            height: i * 5,
+                            color: Colors.white,
+                          ),
                       ],
                     ),
                   ),
