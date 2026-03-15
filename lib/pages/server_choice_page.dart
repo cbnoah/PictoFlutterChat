@@ -48,7 +48,7 @@ class _ServerChoicePageState extends State<ServerChoicePage> {
                     messageCount: refactorMessageCount(12),
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ChatPage()),
+                      MaterialPageRoute(builder: (context) => ChatPage(serverId: 1,)),
                     ),
                   ),
                   ChatRoomButton(
