@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:picto_flutter_chat/components/chat_room_button.dart';
 import 'package:picto_flutter_chat/components/menu_bottom_nav_bar.dart';
@@ -15,10 +16,13 @@ class ServerChoicePage extends StatefulWidget {
 }
 
 class _ServerChoicePageState extends State<ServerChoicePage> {
-  final authService = AuthService();
 
   void logout() async {
-    await authService.signOut();
+    try {
+      await authService.value.signOut();
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+    }
   }
 
   @override

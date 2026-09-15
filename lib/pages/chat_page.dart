@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:picto_flutter_chat/components/drawing_message.dart';
 import 'package:picto_flutter_chat/components/message_page_app_bar.dart';
 import 'package:picto_flutter_chat/components/text_message.dart';
-import 'package:picto_flutter_chat/main.dart';
 
 import '../components/color_builders.dart';
 
@@ -20,23 +19,9 @@ class _ChatPageState extends State<ChatPage> {
   final _textBarController = TextEditingController();
   List messages = [];
 
-  Future<void> _getMessages() async {
-    try {
-      messages = await supabase
-          .from("message")
-          .select()
-          .eq("id_server", widget.serverId);
-      print("messages = ");
-      print(messages);
-    } catch (error) {
-      print(error.toString());
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    _getMessages();
   }
 
   @override

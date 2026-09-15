@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:picto_flutter_chat/utils/auth_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -11,9 +12,10 @@ import 'package:picto_flutter_chat/pages/reset_password.dart';
 import 'package:picto_flutter_chat/pages/signup_page.dart';
 import '../components/account_text_bar.dart';
 import '../components/horizontal_lines_background_painter.dart';
+import '../utils/api_user_sync.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -22,8 +24,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  late final StreamSubscription<AuthState> _authStateSubscription;
-  final authService = AuthService();
   String _errorMessage = '';
 
   void signIn() async {
@@ -34,10 +34,15 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     try {
-      await authService.signInWithEmailAndPassword(_emailController.text, _passwordController.text);
-    } on AuthApiException catch (e) {
+      await authService.value.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      ApiUserSync apiUserSync = ApiUserSync();
+      print(await apiUserSync.syncUsers());
+    } on FirebaseAuthException catch (e) {
       setState(() {
-        _errorMessage = e.message;
+        _errorMessage = e.message ?? "An error occurred while signing in";
       });
     }
   }
@@ -46,7 +51,6 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _authStateSubscription.cancel();
     super.dispose();
   }
 

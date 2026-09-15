@@ -1,12 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:picto_flutter_chat/components/confirmation_button.dart';
 import 'package:picto_flutter_chat/components/menu_app_bar.dart';
 import 'package:picto_flutter_chat/components/menu_bottom_nav_bar.dart';
 import 'package:picto_flutter_chat/utils/auth_service.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../components/account_text_bar.dart';
 import '../components/horizontal_lines_background_painter.dart';
+import '../utils/api_user_sync.dart';
 import 'login_page.dart';
 
 class SignupPage extends StatefulWidget {
@@ -20,7 +21,6 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final authService = AuthService();
   String _errorMessage = '';
 
   void register() async {
@@ -31,14 +31,15 @@ class _SignupPageState extends State<SignupPage> {
       return;
     }
     try {
-      await authService.signUpWithEmailAndPassword(
-        _emailController.text,
-        _passwordController.text,
+      await authService.value.registerWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
       );
+      ApiUserSync().syncUsers();
       if (mounted) Navigator.pop(context);
-    } on AuthApiException catch (e) {
+    } on FirebaseAuthException catch (e) {
       setState(() {
-        _errorMessage = e.message;
+        _errorMessage = e.message ?? "Something went wrong while creating the account";
       });
     }
   }
@@ -108,7 +109,7 @@ class _SignupPageState extends State<SignupPage> {
                             isPasswordField: true,
                           ),
                           ConfirmationButton(
-                            buttonText: "Sign in",
+                            buttonText: "Register",
                             action: () => register(),
                           ),
                           Text(
