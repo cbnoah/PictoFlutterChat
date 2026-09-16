@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:wifi_signal_strength_indicator/wifi_signal_strength_indicator.dart';
 
 class MessagePageAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MessagePageAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    int internetConnection = 4;
+    Future<int?> internetConnection = WifiSignalStrength.getSignalStrength();
 
     return Container(
       color: Colors.white,
@@ -122,18 +123,24 @@ class MessagePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Container(width: 32, height: 32, color: Colors.black),
                   Padding(
                     padding: const EdgeInsets.all(4.0),
-                    child: Row(
-                      spacing: 2,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        for (int i = 0; i < internetConnection; i++)
-                          Container(
-                            width: 4,
-                            height: i * 5,
-                            color: Colors.white,
-                          ),
-                      ],
+                    child: FutureBuilder(
+                      future: internetConnection,
+                      builder: (context, asyncSnapshot) {
+                        int bars = asyncSnapshot.data != null ? (asyncSnapshot.data! + 100) ~/ 10 : 3;
+                        return Row(
+                          spacing: 2,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            for (int i = 0; i < bars; i++)
+                              Container(
+                                width: 4,
+                                height: i * 5,
+                                color: Colors.white,
+                              ),
+                          ],
+                        );
+                      }
                     ),
                   ),
                 ],
