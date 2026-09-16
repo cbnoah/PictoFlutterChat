@@ -27,7 +27,7 @@ class TextMessage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: Text(
-              "Name",
+              username,
               style: TextStyle(
                 fontFamily: "Nintendo_DS_BIOS",
                 fontSize: 24.7,
@@ -49,7 +49,7 @@ class TextMessage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(left: 8.0, bottom: 5.0),
             child: Text(
-              'Message',
+              messageContent,
               style: TextStyle(
                 fontFamily: "Nintendo_DS_BIOS",
                 fontSize: 25,
