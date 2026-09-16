@@ -5,8 +5,11 @@ import 'horizontal_lines_background_painter.dart';
 class DrawingMessage extends StatelessWidget {
   final String imageLink;
   final String username;
+  late final String bucketAddress;
 
-  const DrawingMessage({super.key, required this.imageLink, required this.username});
+  DrawingMessage({super.key, required this.imageLink, required this.username}) {
+   bucketAddress = const String.fromEnvironment('BUCKET_URL');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +43,17 @@ class DrawingMessage extends StatelessWidget {
               child: Image.network(
                 alignment: FractionalOffset.topCenter,
                 fit: BoxFit.cover,
-                imageLink,
+                bucketAddress + imageLink,
+                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                },
               ),
             ),
           ),
